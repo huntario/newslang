@@ -28,6 +28,27 @@ app.get('/words/:language/:word', (req, res) => {
   }
   run().catch(console.dir);
 })
+app.post('/articles/:language', (req, res) => {
+  const client = new MongoClient(uri);
+  async function run() {
+    try {
+      console.log(req.body)
+      // await client.connect();
+      // const database = client.db('language');
+      // const movies = database.collection(req.body.language);
+      // const query = { word: req.params.word };
+      // const update = { $set: req.body };
+      // const options = { upsert: true };
+      // movies.updateOne(query, update, options);
+      // const movie = await movies.findOne(query);
+      //res.send(movie)
+    } finally {
+      // Ensures that the client will close when you finish/error
+      //await client.close();
+    }
+  }
+  run().catch(console.dir);
+})
 
 app.post('/words', (req, res) => {
   const client = new MongoClient(uri);
@@ -52,7 +73,8 @@ app.post('/words', (req, res) => {
 })
 
 app.post('/read', (req, res) => {
-  const vgmUrl = 'https://www.bbc.com/zhongwen/simp/science-57639088';
+  console.log(req.body)
+  const vgmUrl = req.body.url;
   (async () => {
     const browser = await playwright.chromium.launch();
     const page = await browser.newPage();
@@ -61,22 +83,40 @@ app.post('/read', (req, res) => {
     const content = await page.content();
     await fs.writeFileSync('test.html', content);
     await browser.close();
+    const finalReturn = await runPython();
+    //res.send(finalReturn);
+  })();
+  async function runPython() {
+    console.log("runPython()")
     const spawn = require("child_process").spawn;
     const pythonProcess = spawn('python', ["./test.py"]);
+    const finalArray = [];
     pythonProcess.stdout.on('data', async (data) => {
       const characters = [...data.toString('utf-8')];
-      for (i of characters) {
+      finalArray.push(characters);
+    });
+    pythonProcess.stdout.on('end', async () => {
+      const last = await buildResponse(finalArray)
+      console.log(last);
+      res.send(last)
+    });
+  }
+  async function buildResponse(charac) {
+    let articleBody = [];
+    for (y of charac) {
+      for (i of y) {
         const pinyinString = pinyin(i,
           {
             segement: true,
             group: true
           }
         )
-        console.log(i, pinyinString[0][0]);
+        await articleBody.push({ "character": i, "pinyin": pinyinString[0][0] })
       }
-    });
-  })();
-  console.log("Is this it?")
+    }
+    //res.send(articleBody);
+    return articleBody;
+  }
 })
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
