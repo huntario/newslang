@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import CardView from './CardView';
+import Grid from './Grid';
 import FloatingActionButton from './FloatingActionButton';
 import Accordion from './Accordion';
 
@@ -23,46 +24,18 @@ function App() {
     fetchData();
   }, []);
 
-  const [articles, updateArticles] = useState([]);
-  useEffect(() => {
-    async function fetchData2() {
-      const response = await fetch('/read', {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify({ "url": "https://www.bbc.com/zhongwen/simp/chinese-news-57815871" }) // body data type must match "Content-Type" header
-      }).then(function (response) {
-        // The response is a Response instance.
-        // You parse the data into a useable format using `.json()`
-        return response.json();
-      }).then(function (data) {
-        console.log("DATA", data);
-        // `data` is the parsed version of the JSON returned from the above endpoint.
-        updateArticles(data);
-        // { "userId": 1, "id": 1, "title": "...", "body": "..." }
-      });
-    }
-    fetchData2();
-  }, []);
-
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <p className="App-word-zh">{words.word}</p>
         <p className="App-word">{words.english} </p>
         <p className="App-word">{words.pinyin} </p>
         <FloatingActionButton />
-      </header>
+      </header> */}
       <Accordion />
       <CardView />
-      {articles.map((char, index) => <div key={index}>{char.character} : {char.pinyin}</div>)}
+      <Grid />
+      {/* {articles.map((char, index) => <div key={index}>{char.character} : {char.pinyin}</div>)} */}
     </div >
   );
 }
