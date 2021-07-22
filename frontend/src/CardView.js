@@ -153,12 +153,12 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography paragraph>
+        {/* <Typography paragraph>
           Here is another paragraph 
         </Typography>
         <Typography paragraph>
           Here is another paragraph 
-        </Typography>
+        </Typography> */}
       </main>
     </div>
   );

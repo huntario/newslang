@@ -3,6 +3,7 @@ const { MongoClient } = require('mongodb');
 const uri = process.env.DB_HOST;
 const playwright = require('playwright');
 const pinyin = require("pinyin");
+const nodejieba = require("nodejieba");
 const fs = require('fs');
 const express = require('express')
 const app = express()
@@ -114,9 +115,34 @@ app.post('/read', (req, res) => {
         await articleBody.push({ "character": i, "pinyin": pinyinString[0][0] })
       }
     }
-    //res.send(articleBody);
-    return articleBody;
+    let wordchunks = await chunk(charac);
+    let articleResponse = {
+      "article": charac,
+      "chracters": articleBody,
+      "another": wordchunks
+    }
+
+    return articleResponse;
   }
+
+  async function chunk(charac) {
+    let re = /[。?？]/;
+    let articleChunks = [];
+    let articleSentence = [];
+    for (y of charac) {
+      for (i of y) {
+        articleSentence.push(i);
+        if (re.exec(i)) {
+          await articleChunks.push(articleSentence);
+          articleSentence = [];
+        }
+      }
+      console.log("articleChunks", articleChunks);
+      return articleChunks;
+    }
+  }
+
+
 })
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
