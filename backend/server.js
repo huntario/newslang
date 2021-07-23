@@ -77,13 +77,15 @@ app.post('/read', (req, res) => {
   console.log(req.body)
   const vgmUrl = req.body.url;
   (async () => {
-    const browser = await playwright.chromium.launch();
-    const page = await browser.newPage();
-    await page.goto(vgmUrl);
-    await page.screenshot({ path: 'screenshot.png', fullPage: true });
-    const content = await page.content();
-    await fs.writeFileSync('test.html', content);
-    await browser.close();
+    if (!fs.existsSync('./test.html')) {
+      const browser = await playwright.chromium.launch();
+      const page = await browser.newPage();
+      await page.goto(vgmUrl);
+      await page.screenshot({ path: 'screenshot.png', fullPage: true });
+      const content = await page.content();
+      await fs.writeFileSync('test.html', content);
+      await browser.close();
+    }
     const finalReturn = await runPython();
     //res.send(finalReturn);
   })();
@@ -103,26 +105,37 @@ app.post('/read', (req, res) => {
     });
   }
   async function buildResponse(charac) {
-    let articleBody = [];
-    for (y of charac) {
-      for (i of y) {
-        const pinyinString = pinyin(i,
-          {
-            segement: true,
-            group: true
-          }
-        )
-        await articleBody.push({ "character": i, "pinyin": pinyinString[0][0] })
-      }
-    }
+    let articleBody = ['他', '们', '大'];
+    // for (y of charac) {
+    //   for (i of y) {
+    //     const pinyinString = pinyin(i,
+    //       {
+    //         segement: true,
+    //         group: true
+    //       }
+    //     )
+    //     await articleBody.push({ "character": i, "pinyin": pinyinString[0][0] })
+    //   }
+    // }
     let wordchunks = await chunk(charac);
+    let characters = await group(wordchunks);
     let articleResponse = {
       "article": charac,
-      "chracters": articleBody,
+      "characters": characters,
       "another": wordchunks
     }
 
     return articleResponse;
+  }
+  async function group(wordchunks) {
+    let chunckedArray = [];
+    // let groups, groupsch;
+    for (let i of wordchunks) {
+      let groups = i.join('');
+      let groupsch = await nodejieba.cut(groups)
+      chunckedArray.push(groupsch);
+    }
+    return chunckedArray;
   }
 
   async function chunk(charac) {

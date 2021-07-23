@@ -46,7 +46,7 @@ function App() {
       }).then(function (data) {
         console.log("DATA", data);
         // `data` is the parsed version of the JSON returned from the above endpoint.
-        updateArticles(data.chracters);
+        updateArticles(data.characters);
         updateArticle(data.article);
         updateChunks(data.another);
         // { "userId": 1, "id": 1, "title": "...", "body": "..." }
@@ -65,7 +65,7 @@ function App() {
         <FloatingActionButton />
       </header> */}
       <Accordion article={chunks} />
-      <Grid articles={articles} />
+      <Grid characters={articles} />
       {/* {articles.map((char, index) => <div key={index}>{char.character} : {char.pinyin}</div>)} */}
     </div >
   );

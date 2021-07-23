@@ -20,15 +20,21 @@ export default function CenteredGrid(props) {
     <div className={classes.root}>
       <Grid container spacing={1}>
         {
-          props.articles.map(
+          props.characters.map(
             function (char, index) {
               return (
-                <Grid key={index} item xs={1}>
-                  <Paper className={classes.paper}>
-                    {char.character}{char.pinyin}
-                  </Paper>
-                </Grid>
-              );
+                char.map(
+                  function (sen, index) {
+                    return (
+                      <Grid key={index} item xs={2}>
+                        <Paper className={classes.paper}>
+                          {sen}
+                        </Paper>
+                      </Grid>
+                    );
+                  }
+                )
+              )
             }
           )
         }
