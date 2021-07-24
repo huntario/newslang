@@ -5,13 +5,24 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 5,
   },
   paper: {
-    padding: theme.spacing(2),
+    // margin: '.25em',
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    height: "5em",
+    fontSize: "2em",
+    verticleAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100px",
+    width: "100%"
   },
+  characterCard: {
+    margin: '.25em'
+  }
 }));
 
 export default function CenteredGrid(props) {
@@ -23,17 +34,11 @@ export default function CenteredGrid(props) {
           props.characters.map(
             function (char, index) {
               return (
-                char.map(
-                  function (sen, index) {
-                    return (
-                      <Grid key={index} item xs={2}>
-                        <Paper className={classes.paper}>
-                          {sen}
-                        </Paper>
-                      </Grid>
-                    );
-                  }
-                )
+                <Grid key={index} item xs={2} >
+                  <Paper className={classes.paper}>
+                    <div className="characterCard"> {char} </div>
+                  </Paper>
+                </Grid>
               )
             }
           )

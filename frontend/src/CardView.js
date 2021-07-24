@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -153,12 +153,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {/* <Typography paragraph>
-          Here is another paragraph 
-        </Typography>
-        <Typography paragraph>
-          Here is another paragraph 
-        </Typography> */}
+        <p>{props.chunks}</p>
       </main>
     </div>
   );

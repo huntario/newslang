@@ -5,9 +5,11 @@ const playwright = require('playwright');
 const pinyin = require("pinyin");
 const nodejieba = require("nodejieba");
 const fs = require('fs');
-const express = require('express')
-const app = express()
-const port = 4001
+const express = require('express');
+const app = express();
+const port = 4001;
+const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
+const hasChinese = (str) => REGEX_CHINESE.test(str);
 
 app.use(express.json()) // for parsing application/json
 
@@ -129,13 +131,22 @@ app.post('/read', (req, res) => {
   }
   async function group(wordchunks) {
     let chunckedArray = [];
+    let cleaned = [];
     // let groups, groupsch;
     for (let i of wordchunks) {
       let groups = i.join('');
       let groupsch = await nodejieba.cut(groups)
       chunckedArray.push(groupsch);
     }
-    return chunckedArray;
+
+    for (a of chunckedArray) {
+      console.log("a", a);
+      z = await a.filter((b) => REGEX_CHINESE.test(b));
+      console.log("z", z)
+      cleaned.push(z);
+    }
+
+    return cleaned;
   }
 
   async function chunk(charac) {

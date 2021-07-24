@@ -1,27 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { makeStyles } from '@material-ui/core/styles';
 import CardView from './CardView';
-import Grid from './Grid';
 import Accordion from './Accordion';
 
 function App() {
-  // const [words, updateWords] = useState([]);
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await fetch('/words/mandarin/亨特')
-  //       .then(function (response) {
-  //         // The response is a Response instance.
-  //         // You parse the data into a useable format using `.json()`
-  //         return response.json();
-  //       }).then(function (data) {
-  //         // `data` is the parsed version of the JSON returned from the above endpoint.
-  //         updateWords(data);
-  //         console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
-  //       });
-  //   }
-  //   fetchData();
-  // }, []);
-
   const [articles, updateArticles] = useState([]);
   const [article, updateArticle] = useState([]);
   const [chunks, updateChunks] = useState([]);
@@ -40,16 +23,12 @@ function App() {
         referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify({ "url": "https://www.bbc.com/zhongwen/simp/chinese-news-57815871" }) // body data type must match "Content-Type" header
       }).then(function (response) {
-        // The response is a Response instance.
-        // You parse the data into a useable format using `.json()`
         return response.json();
       }).then(function (data) {
         console.log("DATA", data);
-        // `data` is the parsed version of the JSON returned from the above endpoint.
         updateArticles(data.characters);
         updateArticle(data.article);
         updateChunks(data.another);
-        // { "userId": 1, "id": 1, "title": "...", "body": "..." }
       });
     }
     fetchData2();
@@ -58,14 +37,11 @@ function App() {
   return (
     <div className="App">
       <CardView />
-      {/* <header className="App-header">
-        <p className="App-word-zh">{words.word}</p>
-        <p className="App-word">{words.english} </p>
-        <p className="App-word">{words.pinyin} </p>
-        <FloatingActionButton />
-      </header> */}
-      <Accordion article={chunks} />
-      <Grid characters={articles} />
+      <header className="App-header" >
+        {/* {chunks.map((x, index) => <div id={index} className="App-word" >{x}</div>)} */}
+        <div id="mainStory" className="App-word" >{chunks}</div>
+      </header>
+      <Accordion article={chunks} characters={articles} />
       {/* {articles.map((char, index) => <div key={index}>{char.character} : {char.pinyin}</div>)} */}
     </div >
   );
