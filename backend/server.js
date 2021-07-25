@@ -24,7 +24,7 @@ async function runPython(res) {
   });
   pythonProcess.stdout.on('end', async () => {
     const last = await buildResponse(finalArray);
-    // await fs.writeFileSync('chin.json', JSON.stringify(last));
+    await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(last));
     res.send(last)
   });
 }
@@ -45,7 +45,6 @@ async function buildResponse(charac) {
 async function group(wordchunks) {
   let chunckedArray = [];
   let cleaned = [];
-  // let groups, groupsch;
   for (let i of wordchunks) {
     let groups = i.join('');
     let groupsch = await nodejieba.cut(groups)
@@ -168,22 +167,22 @@ app.post('/words', (req, res) => {
 })
 app.post('/read', async (req, res) => {
   const vgmUrl = req.body.url;
-  if (!fs.existsSync('./chin.json')) {
+  if (!fs.existsSync('./cached-resources/chin.json')) {
     (async () => {
       if (!fs.existsSync('./test.html')) {
         const browser = await playwright.chromium.launch();
         const page = await browser.newPage();
         await page.goto(vgmUrl);
-        await page.screenshot({ path: 'screenshot.png', fullPage: true });
+        await page.screenshot({ path: './cached-resources/screenshot.png', fullPage: true });
         const content = await page.content();
-        await fs.writeFileSync('test.html', content);
+        await fs.writeFileSync('./cached-resources/test.html', content);
         await browser.close();
       }
       const finalReturn = await runPython(res);
     })();
   }
   else {
-    let rawFile = fs.readFileSync('chin.json');
+    let rawFile = fs.readFileSync('./cached-resources/chin.json');
     let jsonFile = JSON.parse(rawFile);
     res.send(jsonFile);
   }

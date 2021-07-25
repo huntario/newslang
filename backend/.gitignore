@@ -6,6 +6,13 @@
 .pnp.js
 .env
 
+/cached-resources
+
+# exclude everything
+/cached-resources/*
+# exception to the rule
+!/cached-resources/.gitkeep 
+
 # testing
 /coverage
 
