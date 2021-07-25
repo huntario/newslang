@@ -16,12 +16,16 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import GavelIcon from '@material-ui/icons/Gavel';
 import TimerIcon from '@material-ui/icons/Timer';
 import { Link } from "react-router-dom";
 
+
 const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -78,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
 }));
+
 export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -90,6 +95,7 @@ export default function PersistentDrawerLeft(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -145,8 +151,6 @@ export default function PersistentDrawerLeft(props) {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} />
-        <p>{props.chunks}</p>
       </main>
     </div>
   );

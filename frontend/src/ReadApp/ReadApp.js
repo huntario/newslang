@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './ReadApp.css';
-import CardView from '../CardView';
 import Accordion from './Accordion';
 function ReadApp() {
   const [frontEndData, updatefrontEndData] = useState([]);
@@ -26,10 +25,8 @@ function ReadApp() {
     }
     fetchData2();
   }, []);
-
   return (
     <div className="App">
-      <CardView />
       <header className="App-header">
         <div id="mainStory" className="App-word" >{frontEndData.article}</div>
       </header>

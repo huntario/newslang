@@ -22,7 +22,7 @@ function App() {
           <p> PROGRESS ROUTE </p>
         </Route>
         <Route path="/test">
-          <p> PROGRESS ROUTE </p>
+          <p> TEST ROUTE </p>
         </Route>
         <Route path="/">
           <Redirect to="/read" />
