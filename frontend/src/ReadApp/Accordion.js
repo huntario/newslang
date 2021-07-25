@@ -55,7 +55,7 @@ export default function ActionsInAccordionSummary(props) {
                       <MultiLine unique={index}> </MultiLine>
                     </AccordionDetails>
                   </Accordion>
-                  <Grid characters={props.withPinyin[index]} />
+                  <Grid characters={props.withEnglish[index]} />
                 </div>
               );
             }

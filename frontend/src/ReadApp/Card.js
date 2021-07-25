@@ -41,13 +41,14 @@ export default function CenteredGrid(props) {
   })
   const classes = useStyles();
   return (
-    <Grid key={`Grid${props.index}`} item xs={2} >
+    <Grid key={`Grid${props.index}`} item xs={4} >
       <ReactCardFlip isFlipped={isFlipped} flipDirection="vertical">
         <Paper className={classes.paper} onClick={handleClick}>
-          <div className="characterCard" style={{ fontSize: '24px', paddingTop: '.75em' }}> <p>{props.char.character}</p> </div>
+          <div className="characterCard" style={{ fontSize: '24px', paddingTop: '.75em' }}> <p>{props.char.characters}</p> </div>
         </Paper>
         <Paper className={classes.paper} onClick={handleClick}>
-          <div className="pinyinCard" style={{ fontSize: '24px', margin: '1px', paddingTop: '1.5em' }} > {props.char.piyin} </div>
+          <div className="pinyinCard" style={{ fontSize: '24px', margin: '1px', paddingTop: '1em' }} > {props.char.pinyin} </div>
+          <div className="pinyinCard" style={{ fontSize: '12px', margin: '1px' }} > {props.char.english.map((x) => x + '; ')} </div>
         </Paper>
       </ReactCardFlip>
     </Grid>
