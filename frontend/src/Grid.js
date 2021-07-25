@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Card from './Card';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,12 +37,7 @@ export default function CenteredGrid(props) {
             props.characters.map(
               function (char, index) {
                 return (
-                  <Grid key={index} item xs={2} >
-                    <Paper className={classes.paper}>
-                      <div className="characterCard" style={{ fontSize: '24px' }}> <p>{char.character}</p> </div>
-                      <div className="pinyinCard" style={{ fontSize: '18px', margin: '1px' }} > {char.piyin} </div>
-                    </Paper>
-                  </Grid>
+                  <Card key={index} char={char}></Card>
                 )
               }
             )

@@ -25,18 +25,16 @@ const useStyles = makeStyles({
     padding: '120px'
   }
 });
-
 export default function ActionsInAccordionSummary(props) {
   const classes = useStyles();
   if (props.sentences) {
     return (
       <div className={classes.root}>
-        {console.log("props accordion.js", props)}
         {
           props.sentences.map(
             function (art, index) {
               return (
-                <div className="drawerdrawer">
+                <div className="drawerdrawer" key={`drawerdrawer${index}`}>
                   <Accordion key={index} >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}

@@ -4,7 +4,7 @@ import CardView from './CardView';
 import Accordion from './Accordion';
 
 function App() {
-  const [frontEndData, updateData] = useState([]);
+  const [frontEndData, updatefrontEndData] = useState([]);
   useEffect(() => {
     async function fetchData2() {
       await fetch('/read', {
@@ -22,7 +22,7 @@ function App() {
         return response.json();
       }).then(function (data) {
         console.log("DATA", data);
-        updateData(data);
+        updatefrontEndData(data);
       });
     }
     fetchData2();
