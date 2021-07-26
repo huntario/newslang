@@ -13,6 +13,6 @@ def branch():
     run("checkout", "-b", br)
     run("add", "." )
     run("commit", "-m", cm)
-    run("checkout main")
-    run("merge ", br)
+    run("checkout", "main")
+    run("merge", br)
 branch()
