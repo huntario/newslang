@@ -15,4 +15,5 @@ def branch():
     run("commit", "-m", cm)
     run("checkout", "main")
     run("merge", br)
+    run("push", "origin", "main")
 branch()
