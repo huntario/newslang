@@ -23,6 +23,15 @@ const useStyles = makeStyles({
   },
   accordionDetails: {
     padding: '120px'
+  },
+  multiLine: {
+    width: '100%',
+    position: "absolute"
+  },
+  grid: {
+    width: '100%',
+    position: "absolute",
+    fontSize: "100px"
   }
 });
 export default function ActionsInAccordionSummary(props) {
@@ -52,10 +61,12 @@ export default function ActionsInAccordionSummary(props) {
                       />
                     </AccordionSummary>
                     <AccordionDetails>
-                      <MultiLine unique={index}> </MultiLine>
+                      <div>
+                        <MultiLine className={classes.multiLine} key={`index${classes.multiLine}`} index={index}> </MultiLine>
+                        <Grid className={classes.grid} characters={props.withEnglish[index]} />
+                      </div>
                     </AccordionDetails>
                   </Accordion>
-                  <Grid characters={props.withEnglish[index]} />
                 </div>
               );
             }

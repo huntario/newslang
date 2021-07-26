@@ -12,22 +12,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function MultilineTextFields(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState('Controlled');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <div>
         <TextField
-          id={`outlined-multiline-static${props.unique}`}
+          key={`${props.index}textField`}
+          id={`${props.index}id`}
           label="Translation"
+          rows={4}
+          style={{ margin: 8 }}
+          placeholder="Translate"
           multiline
-          fullWidth={true}
-          value={value}
-          onChange={handleChange}
-          variant="outlined"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="filled"
         />
       </div>
     </form>

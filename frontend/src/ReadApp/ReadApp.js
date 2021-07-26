@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ReadApp.css';
 import Accordion from './Accordion';
+import ButtonSave from '../MainApp/ButtonSave';
+import ButtonAll from '../MainApp/ButtonAll';
 function ReadApp() {
   const [frontEndData, updatefrontEndData] = useState([]);
   useEffect(() => {
@@ -30,6 +32,10 @@ function ReadApp() {
       <header className="App-header">
         <div id="mainStory" className="App-word" >{frontEndData.article}</div>
       </header>
+      <div style={{ textAlign: 'center', paddingTop: '2em' }}>
+        <ButtonSave />
+        <ButtonAll />
+      </div>
       <Accordion
         sentences={frontEndData.sentences}
         withPinyin={frontEndData.pinchars}

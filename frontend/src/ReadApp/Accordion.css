@@ -2,3 +2,8 @@
   font-size: calc(50px + 2vmin);
   margin: 720px; 
 }
+
+.App button {
+    text-align: center;
+
+}

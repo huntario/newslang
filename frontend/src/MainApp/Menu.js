@@ -16,8 +16,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import GavelIcon from '@material-ui/icons/Gavel';
 import TimerIcon from '@material-ui/icons/Timer';
@@ -136,9 +134,9 @@ export default function PersistentDrawerLeft(props) {
         <Divider />
         <List>
           {['Read', 'Drill', 'Progress', 'Test'].map((text, index) => (
-            <Link to={routes[index]}>
-              <ListItem button key={text}>
-                <ListItemIcon>{icons[index]}</ListItemIcon>
+            <Link to={routes[index]} key={`icons${routes[index] + routes}`}>
+              <ListItem >
+                <ListItemIcon >{icons[index]}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             </Link>

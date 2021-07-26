@@ -36,6 +36,10 @@
   color: white;
 }
 
+.ButtonSaver {
+  align-items: center;
+}
+
 .App-link {
   color: #61dafb;
 }
