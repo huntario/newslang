@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import ButtonSave from '../MainApp/ButtonSaveTranslation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +31,7 @@ export default function MultilineTextFields(props) {
           }}
           variant="filled"
         />
+        <ButtonSave />
       </div>
     </form>
   );
