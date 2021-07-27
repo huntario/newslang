@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%"
   },
   characterCard: {
-    margin: '.25em'
+    margin: '.25em',
+    width: '100%'
+
   },
   pinyinCard: {
     fontSize: "2px"
@@ -37,7 +39,7 @@ export default function CenteredGrid(props) {
             props.characters.map(
               function (char, index) {
                 return (
-                  <Card key={index} char={char}></Card>
+                  <Card className={classes.characterCard} key={index} char={char}></Card>
                 )
               }
             )

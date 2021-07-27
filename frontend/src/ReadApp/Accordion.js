@@ -12,7 +12,7 @@ import Grid from './Grid';
 const useStyles = makeStyles({
   root: {
     width: '100%',
-    padding: '120px',
+    padding: '10px',
     "& .MuiPaper-root": {
       marginBottom: ".5em",
       marginTop: ".5em"
@@ -61,7 +61,7 @@ export default function ActionsInAccordionSummary(props) {
                       />
                     </AccordionSummary>
                     <AccordionDetails>
-                      <div>
+                      <div style={{ width: "100%" }}>
                         <MultiLine className={classes.multiLine} key={`index${classes.multiLine}`} index={index}> </MultiLine>
                         <Grid className={classes.grid} characters={props.withEnglish[index]} />
                       </div>
