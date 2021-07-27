@@ -4,9 +4,9 @@ import Accordion from './Accordion';
 import ButtonSave from '../MainApp/ButtonSave';
 import ButtonAll from '../MainApp/ButtonAll';
 function ReadApp() {
-  const [frontEndData, updatefrontEndData] = useState([]);
+  const [dataReadApp, updatedataReadApp] = useState([]);
   useEffect(() => {
-    async function fetchData2() {
+    async function fetchData() {
       await fetch('/read', {
         method: 'POST',
         mode: 'cors',
@@ -21,27 +21,30 @@ function ReadApp() {
       }).then(function (response) {
         return response.json();
       }).then(function (data) {
-        console.log("DATA", data);
-        updatefrontEndData(data);
+        updatedataReadApp(data);
       });
     }
-    fetchData2();
+    fetchData();
   }, []);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div id="mainStory" className="App-word" >{frontEndData.article}</div>
-      </header>
-      <div style={{ textAlign: 'center', paddingTop: '2em' }}>
-        <ButtonSave />
-        <ButtonAll />
-      </div>
-      <Accordion
-        sentences={frontEndData.sentences}
-        withPinyin={frontEndData.pinchars}
-        withEnglish={frontEndData.withEnglish}
-      />
-    </div >
-  );
+  if (dataReadApp) {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <div id="mainStory" className="App-word" >{dataReadApp.sentences}</div>
+        </header>
+        <div style={{ textAlign: 'center', paddingTop: '2em' }}>
+          <ButtonSave />
+          <ButtonAll />
+        </div>
+        <Accordion
+          sentences={dataReadApp.sentences}
+          cardUnits={dataReadApp.cardUnits}
+        />
+      </div >
+    );
+  }
+  else {
+    <p>One moment while the story loads...</p>
+  }
 }
 export default ReadApp;

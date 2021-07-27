@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Menu from './Menu';
 import ReadApp from '../ReadApp/ReadApp';
+import DrillApp from '../DrillApp/DrillApp';
 import {
   Switch,
   Route,
@@ -16,7 +17,7 @@ function App() {
           <ReadApp />
         </Route>
         <Route path="/drill">
-          <p> DRILL ROUTE </p>
+          <DrillApp />
         </Route>
         <Route path="/progress">
           <p> PROGRESS ROUTE </p>

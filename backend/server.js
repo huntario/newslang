@@ -34,11 +34,8 @@ async function buildResponse(charac) {
   let pinchars = await addpinyin(characters);
   let withEnglish = await lookupMeaning(pinchars);
   let articleResponse = {
-    "article": charac,
-    "combos": characters,
     "sentences": wordchunks,
-    "pinchars": pinchars,
-    "withEnglish": withEnglish
+    "cardUnits": withEnglish
   }
   return articleResponse;
 }

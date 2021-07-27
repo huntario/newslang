@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
 import ReplyAllIcon from '@material-ui/icons/ReplyAll';
 
 const useStyles = makeStyles((theme) => ({

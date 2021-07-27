@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "2px"
   }
 }));
-
 export default function CenteredGrid(props) {
   const classes = useStyles();
   if (props.characters) {
