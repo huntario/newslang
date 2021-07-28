@@ -24,10 +24,22 @@ async function runPython(res) {
   });
   pythonProcess.stdout.on('end', async () => {
     const last = await buildResponse(finalArray);
-    await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(last));
+    //await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(last));
+
+    console.log(last.cardUnits, " last.cardUnits");
     res.send(last)
+    last.cardUnits.map(async (charArray) => await addWordsToDatabase(charArray, 'mandarin'));
+    last.sentences.map(async (sentence) =>
+      await addSentenceToDatabase(
+        {
+          mandardin: sentence,
+          english: []
+        },
+        'mandarin-sen'
+      ));
   });
 }
+
 async function buildResponse(charac) {
   let wordchunks = await chunk(charac);
   let characters = await group(wordchunks);
@@ -104,6 +116,47 @@ async function lookupMeaning(characterArray) {
   });
   return complete;
 }
+async function addWordsToDatabase(wordObjectArray, language) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('language');
+      const movies = database.collection(language);
+      console.log("wordObjectArray ", wordObjectArray);
+      const result = await movies.insertMany(wordObjectArray);
+      console.log(`${result.insertedCount} documents were inserted`);
+    }
+    catch {
+      addWordsToDatabase(wordObjectArray, language)
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+async function addSentenceToDatabase(sentence, language) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('language');
+      const movies = database.collection(language);
+      console.log("sentence ", sentence);
+      const result = await movies.insertOne(sentence);
+      console.log(`${result.insertedCount} documents were inserted`);
+    }
+    catch {
+      addSentenceToDatabase(sentence, language)
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+
 // ROUTES
 app.get('/words/:language/:word', (req, res) => {
   const client = new MongoClient(uri);
@@ -118,26 +171,6 @@ app.get('/words/:language/:word', (req, res) => {
     } finally {
       // Ensures that the client will close when you finish/error
       await client.close();
-    }
-  }
-  run().catch(console.dir);
-})
-app.post('/articles/:language', (req, res) => {
-  const client = new MongoClient(uri);
-  async function run() {
-    try {
-      // await client.connect();
-      // const database = client.db('language');
-      // const movies = database.collection(req.body.language);
-      // const query = { word: req.params.word };
-      // const update = { $set: req.body };
-      // const options = { upsert: true };
-      // movies.updateOne(query, update, options);
-      // const movie = await movies.findOne(query);
-      //res.send(movie)
-    } finally {
-      // Ensures that the client will close when you finish/error
-      //await client.close();
     }
   }
   run().catch(console.dir);
