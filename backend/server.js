@@ -25,21 +25,16 @@ async function runPython(res) {
   pythonProcess.stdout.on('end', async () => {
     const last = await buildResponse(finalArray);
     //await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(last));
-
-    console.log(last.cardUnits, " last.cardUnits");
-    res.send(last)
-    last.cardUnits.map(async (charArray) => await addWordsToDatabase(charArray, 'mandarin'));
-    last.sentences.map(async (sentence) =>
-      await addSentenceToDatabase(
-        {
-          mandardin: sentence,
-          english: []
-        },
-        'mandarin-sen'
-      ));
-  });
+    last.sentences.map(async (charArray, index) =>
+      addSentenceToDatabase({
+        mandarin: charArray.join(''),
+        english: null,
+        vocab: last.cardUnits[index]
+      }, 'mandarin-to-english')
+    )
+  }
+  )
 }
-
 async function buildResponse(charac) {
   let wordchunks = await chunk(charac);
   let characters = await group(wordchunks);
@@ -116,26 +111,6 @@ async function lookupMeaning(characterArray) {
   });
   return complete;
 }
-async function addWordsToDatabase(wordObjectArray, language) {
-  const client = new MongoClient(uri);
-  {
-    try {
-      await client.connect();
-      const database = client.db('language');
-      const movies = database.collection(language);
-      console.log("wordObjectArray ", wordObjectArray);
-      const result = await movies.insertMany(wordObjectArray);
-      console.log(`${result.insertedCount} documents were inserted`);
-    }
-    catch {
-      addWordsToDatabase(wordObjectArray, language)
-    }
-    finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
-  }
-}
 async function addSentenceToDatabase(sentence, language) {
   const client = new MongoClient(uri);
   {
@@ -143,11 +118,15 @@ async function addSentenceToDatabase(sentence, language) {
       await client.connect();
       const database = client.db('language');
       const movies = database.collection(language);
-      console.log("sentence ", sentence);
-      const result = await movies.insertOne(sentence);
-      console.log(`${result.insertedCount} documents were inserted`);
+      const query = { mandarin: sentence.mandarin }
+      // const result = await movies.findOne(query);
+      const result = await movies.updateOne(query, { $set: sentence }, { upsert: true });
+      //, sentence, { upsert: true });
+      let resultLog = `Matches : ${result.matchedCount} \nUpdated : ${result.modifiedCount} \nupsertedCount : ${result.upsertedCount}\n`
+      console.log(resultLog);
     }
-    catch {
+    catch (exception_var) {
+      console.log(" CATCH at addSentenceToDatabase ", exception_var);
       addSentenceToDatabase(sentence, language)
     }
     finally {
@@ -156,7 +135,6 @@ async function addSentenceToDatabase(sentence, language) {
     }
   }
 }
-
 // ROUTES
 app.get('/words/:language/:word', (req, res) => {
   const client = new MongoClient(uri);
