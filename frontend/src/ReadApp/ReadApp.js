@@ -27,18 +27,18 @@ function ReadApp() {
     fetchData();
   }, []);
   if (dataReadApp) {
+    let story = dataReadApp.map((x) => x.mandarin)
     return (
       <div className="App">
         <header className="App-header">
-          <div id="mainStory" className="App-word" >{dataReadApp.sentences}</div>
+          <div id="mainStory" className="App-word" >{story}</div>
         </header>
         <div style={{ textAlign: 'center', paddingTop: '2em' }}>
           <ButtonSave />
           <ButtonAll />
         </div>
         <Accordion
-          sentences={dataReadApp.sentences}
-          cardUnits={dataReadApp.cardUnits}
+          data={dataReadApp}
         />
       </div >
     );

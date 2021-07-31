@@ -36,10 +36,10 @@ const useStyles = makeStyles({
 });
 export default function ActionsInAccordionSummary(props) {
   const classes = useStyles();
-  if (props.sentences && props.cardUnits) {
+  if (props.data) {
     return (
       <div className={classes.root}>
-        {props.sentences.map((x, index) =>
+        {props.data.map((x, index) =>
           <Accordion key={index} >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -53,13 +53,13 @@ export default function ActionsInAccordionSummary(props) {
                 onClick={(event) => event.stopPropagation()}
                 onFocus={(event) => event.stopPropagation()}
                 control={<Checkbox />}
-                label={x}
+                label={x.mandarin}
               />
             </AccordionSummary>
             <AccordionDetails>
               <div style={{ width: "100%" }}>
                 <MultiLine className={classes.multiLine} key={`index${classes.multiLine}`} index={index}> </MultiLine>
-                <Grid className={classes.grid} characters={props.cardUnits[index]} />
+                <Grid className={classes.grid} vocab={[props.data[index].vocab]} />
               </div>
             </AccordionDetails>
           </Accordion>

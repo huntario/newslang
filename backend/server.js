@@ -24,16 +24,21 @@ async function runPython(res) {
   });
   pythonProcess.stdout.on('end', async () => {
     const last = await buildResponse(finalArray);
-    //await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(last));
-    last.sentences.map(async (charArray, index) =>
-      addSentenceToDatabase({
+    let final = [];
+    await last.sentences.map(async (charArray, index) => {
+      let section =
+      {
         mandarin: charArray.join(''),
         english: null,
         vocab: last.cardUnits[index]
-      }, 'mandarin-to-english')
-    )
-  }
-  )
+      }
+      await final.push(section)
+    })
+    await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(final));
+    res.send(final);
+    final.map(async (section) => addSentenceToDatabase(section, 'mandarin-to-english'));
+
+  })
 }
 async function buildResponse(charac) {
   let wordchunks = await chunk(charac);
@@ -127,7 +132,7 @@ async function addSentenceToDatabase(sentence, language) {
     }
     catch (exception_var) {
       console.log(" CATCH at addSentenceToDatabase ", exception_var);
-      addSentenceToDatabase(sentence, language)
+      await addSentenceToDatabase(sentence, language)
     }
     finally {
       // Ensures that the client will close when you finish/error

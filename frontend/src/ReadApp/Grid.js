@@ -30,15 +30,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function CenteredGrid(props) {
   const classes = useStyles();
-  if (props.characters) {
+  if (props) {
     return (
       <div className={classes.root}>
         <Grid container spacing={1}>
           {
-            props.characters.map(
-              function (char, index) {
+            props.vocab.map(
+              function (vocab, index) {
                 return (
-                  <Card className={classes.characterCard} key={index} char={char}></Card>
+                  // 
+                  vocab.map((x, x_index) =>
+                    (<Card className={classes.characterCard} key={index + x_index} words={x}>
+                    </Card>)
+                  )
                 )
               }
             )
