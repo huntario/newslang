@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Menu from './Menu';
 import ReadApp from '../ReadApp/ReadApp';
@@ -9,12 +9,22 @@ import {
   Redirect
 } from "react-router-dom";
 function App() {
+  const [readArticle, updateReadArticle] =
+    useState("https://www.bbc.com/zhongwen/simp/chinese-news-57815871");
+
+  // useEffect(() => {
+  //   updateURL()
+  // }, [readArticle]);
+
+  function updateURL(url) {
+    updateReadArticle(url);
+  }
   return (
     <div className="App">
-      <Menu />
+      <Menu updateURL={updateURL} />
       <Switch>
         <Route path="/read">
-          <ReadApp />
+          <ReadApp article={readArticle} />
         </Route>
         <Route path="/drill">
           <DrillApp />

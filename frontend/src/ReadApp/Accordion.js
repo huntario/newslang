@@ -35,6 +35,7 @@ const useStyles = makeStyles({
   }
 });
 export default function ActionsInAccordionSummary(props) {
+  // console.log("function ActionsInAccordionSummary(props) ", props)
   const classes = useStyles();
   if (props.data) {
     return (

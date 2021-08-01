@@ -38,7 +38,6 @@ export default function CenteredGrid(props) {
             props.vocab.map(
               function (vocab, index) {
                 return (
-                  // 
                   vocab.map((x, x_index) =>
                     (<Card className={classes.characterCard} key={index + x_index} words={x}>
                     </Card>)

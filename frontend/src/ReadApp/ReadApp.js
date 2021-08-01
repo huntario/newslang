@@ -3,10 +3,13 @@ import './ReadApp.css';
 import Accordion from './Accordion';
 import ButtonSave from '../MainApp/ButtonSave';
 import ButtonAll from '../MainApp/ButtonAll';
-function ReadApp() {
+import TextField from '@material-ui/core/TextField';
+function ReadApp(props) {
   const [dataReadApp, updatedataReadApp] = useState([]);
+  const whatever = () => props ? console.log(props) : console.log("props are undefined");
   useEffect(() => {
-    async function fetchData() {
+    whatever();
+    async function fetchData(url) {
       await fetch('/read', {
         method: 'POST',
         mode: 'cors',
@@ -17,15 +20,16 @@ function ReadApp() {
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
-        body: JSON.stringify({ "url": "https://www.bbc.com/zhongwen/simp/chinese-news-57815871" })
+        body: JSON.stringify({ "url": url })
       }).then(function (response) {
         return response.json();
       }).then(function (data) {
+        console.log("data ", data)
         updatedataReadApp(data);
       });
     }
-    fetchData();
-  }, []);
+    fetchData(props.article)
+  }, [props.article]);
   if (dataReadApp) {
     let story = dataReadApp.map((x) => x.mandarin)
     return (

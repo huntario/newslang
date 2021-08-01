@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,6 +20,11 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import GavelIcon from '@material-ui/icons/Gavel';
 import TimerIcon from '@material-ui/icons/Timer';
 import { Link } from "react-router-dom";
+import TextField from '@material-ui/core/TextField';
+import CenteredGrid from '../ReadApp/Grid';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import DirectionsIcon from '@material-ui/icons/Directions';
 
 
 const drawerWidth = 240;
@@ -79,12 +84,19 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    textAlign: 'centered',
+    alignItems: 'center',
+    width: '250ch',
+  }
 }));
 
 export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const icons = [<PostAddIcon />, <TimerIcon />, <TrendingUpIcon />, <GavelIcon />];
   const routes = ["read", "drill", "progress", "test"];
   const handleDrawerOpen = () => {
@@ -94,6 +106,30 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
+  const [searchedText, updateSearchedText] = useState();
+  const handleClick = () => {
+    updateSearchedText(inputText)
+    console.log("searchedText :", inputText)
+  }
+
+  const [inputText, updateInputText] = useState();
+  const handleInputChange = (event) => {
+    updateInputText(event.target.value);
+  }
+
+  // useEffect(() => {
+  //   console.log(inputText)
+  // }, [inputText])
+
+
+  useEffect(() => {
+    const clicked = () => handleClick;
+    window.addEventListener('click', clicked)
+    props.updateURL(inputText);
+    return () => {
+      window.removeEventListener('click', clicked)
+    }
+  }, [searchedText])
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -113,8 +149,19 @@ export default function PersistentDrawerLeft(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-          </Typography>
+          <InputBase
+            className={classes.input}
+            placeholder="Study Another Source"
+            inputProps={{ 'aria-label': 'study another source' }}
+            onChange={handleInputChange}
+          />
+          <IconButton type="submit" className={classes.iconButton} aria-label="search">
+            <SearchIcon onClick={handleClick} />
+          </IconButton>
+          <Divider className={classes.divider} orientation="vertical" />
+          <IconButton color="primary" className={classes.iconButton} aria-label="directions">
+            <DirectionsIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

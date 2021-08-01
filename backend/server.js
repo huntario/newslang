@@ -34,10 +34,10 @@ async function runPython(res) {
       }
       await final.push(section)
     })
-    await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(final));
+    // await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(final));
     res.send(final);
+    // await fs.writeFileSync('../frontend/public/cached/ReadAppData.json', JSON.stringify(final));
     final.map(async (section) => addSentenceToDatabase(section, 'mandarin-to-english'));
-
   })
 }
 async function buildResponse(charac) {
@@ -182,15 +182,15 @@ app.post('/read', async (req, res) => {
   const vgmUrl = req.body.url;
   if (!fs.existsSync('./cached-resources/chin.json')) {
     (async () => {
-      if (!fs.existsSync('./test.html')) {
-        const browser = await playwright.chromium.launch();
-        const page = await browser.newPage();
-        await page.goto(vgmUrl);
-        await page.screenshot({ path: './cached-resources/screenshot.png', fullPage: true });
-        const content = await page.content();
-        await fs.writeFileSync('./cached-resources/test.html', content);
-        await browser.close();
-      }
+      //if (!fs.existsSync('./test.html')) {
+      const browser = await playwright.chromium.launch();
+      const page = await browser.newPage();
+      await page.goto(vgmUrl);
+      await page.screenshot({ path: './cached-resources/screenshot.png', fullPage: true });
+      const content = await page.content();
+      await fs.writeFileSync('./cached-resources/test.html', content);
+      await browser.close();
+      //}
       const finalReturn = await runPython(res);
     })();
   }
