@@ -1,14 +1,19 @@
 # Newslang
+
+
+[Chalkboard view ](screenshots/Screen Shot 2021-08-01 at 11.42.27 PM.png)
+
+
+[Sentence and Card view ](Screen Shot 2021-08-01 at 11.42.27 PM.png)
+
+
+
 ## Installation
 
 ```javascript
 
-# cd ./frontend
-npm start
-
-# cd ./backend
-nodemon server.js
-
+# cd ./frontend  & cd ./backend
+npm install
 ```
 
 ## Usage
