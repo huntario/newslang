@@ -6,9 +6,7 @@ import ButtonAll from '../MainApp/ButtonAll';
 import TextField from '@material-ui/core/TextField';
 function ReadApp(props) {
   const [dataReadApp, updatedataReadApp] = useState([]);
-  const whatever = () => props ? console.log(props) : console.log("props are undefined");
   useEffect(() => {
-    whatever();
     async function fetchData(url) {
       await fetch('/read', {
         method: 'POST',

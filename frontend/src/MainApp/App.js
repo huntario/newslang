@@ -12,10 +12,6 @@ function App() {
   const [readArticle, updateReadArticle] =
     useState("https://www.bbc.com/zhongwen/simp/chinese-news-57815871");
 
-  // useEffect(() => {
-  //   updateURL()
-  // }, [readArticle]);
-
   function updateURL(url) {
     updateReadArticle(url);
   }

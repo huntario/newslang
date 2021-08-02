@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 import codecs
 import sys
 
-with open("./cached-resources/test.html", "r", encoding='utf-8') as f:
+file = sys.argv[1]
+with open(file, "r", encoding='utf-8') as f:
     text = f.read()
     soup = BeautifulSoup(text, 'html.parser')
     print(soup.get_text())

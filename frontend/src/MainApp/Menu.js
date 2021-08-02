@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -20,8 +20,8 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import GavelIcon from '@material-ui/icons/Gavel';
 import TimerIcon from '@material-ui/icons/Timer';
 import { Link } from "react-router-dom";
-import TextField from '@material-ui/core/TextField';
-import CenteredGrid from '../ReadApp/Grid';
+//import TextField from '@material-ui/core/TextField';
+//import CenteredGrid from '../ReadApp/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
@@ -114,13 +114,9 @@ export default function PersistentDrawerLeft(props) {
 
   const [inputText, updateInputText] = useState();
   const handleInputChange = (event) => {
+    event.preventDefault();
     updateInputText(event.target.value);
   }
-
-  // useEffect(() => {
-  //   console.log(inputText)
-  // }, [inputText])
-
 
   useEffect(() => {
     const clicked = () => handleClick;
@@ -155,8 +151,8 @@ export default function PersistentDrawerLeft(props) {
             inputProps={{ 'aria-label': 'study another source' }}
             onChange={handleInputChange}
           />
-          <IconButton type="submit" className={classes.iconButton} aria-label="search">
-            <SearchIcon onClick={handleClick} />
+          <IconButton type="submit" className={classes.iconButton} onClick={handleClick} aria-label="search">
+            <SearchIcon />
           </IconButton>
           <Divider className={classes.divider} orientation="vertical" />
           <IconButton color="primary" className={classes.iconButton} aria-label="directions">

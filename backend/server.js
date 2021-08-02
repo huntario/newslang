@@ -14,32 +14,7 @@ const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u
 app.use(express.json()) // for parsing application/json
 app.use(compression());
 // AUX FUNCTIONS
-async function runPython(res) {
-  const spawn = require("child_process").spawn;
-  const pythonProcess = spawn('python', ["./test.py"]);
-  const finalArray = [];
-  pythonProcess.stdout.on('data', async (data) => {
-    const characters = [...data.toString('utf-8')];
-    finalArray.push(characters);
-  });
-  pythonProcess.stdout.on('end', async () => {
-    const last = await buildResponse(finalArray);
-    let final = [];
-    await last.sentences.map(async (charArray, index) => {
-      let section =
-      {
-        mandarin: charArray.join(''),
-        english: null,
-        vocab: last.cardUnits[index]
-      }
-      await final.push(section)
-    })
-    // await fs.writeFileSync('./cached-resources/chin.json', JSON.stringify(final));
-    res.send(final);
-    // await fs.writeFileSync('../frontend/public/cached/ReadAppData.json', JSON.stringify(final));
-    final.map(async (section) => addSentenceToDatabase(section, 'mandarin-to-english'));
-  })
-}
+
 async function buildResponse(charac) {
   let wordchunks = await chunk(charac);
   let characters = await group(wordchunks);
@@ -52,18 +27,23 @@ async function buildResponse(charac) {
   return articleResponse;
 }
 async function group(wordchunks) {
-  let chunckedArray = [];
-  let cleaned = [];
-  for (let i of wordchunks) {
-    let groups = i.join('');
-    let groupsch = await nodejieba.cut(groups)
-    chunckedArray.push(groupsch);
+  try {
+    let chunckedArray = [];
+    let cleaned = [];
+    for (let i of wordchunks) {
+      let groups = i.join('');
+      let groupsch = await nodejieba.cut(groups)
+      chunckedArray.push(groupsch);
+    }
+    for (a of chunckedArray) {
+      z = await a.filter((b) => REGEX_CHINESE.test(b));
+      cleaned.push(z);
+    }
+    return cleaned;
   }
-  for (a of chunckedArray) {
-    z = await a.filter((b) => REGEX_CHINESE.test(b));
-    cleaned.push(z);
+  catch {
+    console.log("Dis one no work")
   }
-  return cleaned;
 }
 async function chunk(charac) {
   let re = /[。?？]/;
@@ -81,17 +61,22 @@ async function chunk(charac) {
   }
 }
 async function addpinyin(characterArray) {
-  let re = /[。?？]/;
-  let sentences = [];
-  for (y of characterArray) {
-    let wordchunks = [];
-    for (i of y) {
-      let pinyins = await pinyin(i, { segment: true, group: true })
-      await wordchunks.push({ character: i, pinyin: pinyins[0][0] })
+  try {
+    let re = /[。?？]/;
+    let sentences = [];
+    for (y of characterArray) {
+      let wordchunks = [];
+      for (i of y) {
+        let pinyins = await pinyin(i, { segment: true, group: true })
+        await wordchunks.push({ character: i, pinyin: pinyins[0][0] })
+      }
+      sentences.push(wordchunks)
     }
-    sentences.push(wordchunks)
+    return sentences;
   }
-  return sentences;
+  catch {
+    console.log("NOT WORKING!!!!")
+  }
 }
 async function lookupMeaning(characterArray) {
   let complete = []
@@ -127,8 +112,7 @@ async function addSentenceToDatabase(sentence, language) {
       // const result = await movies.findOne(query);
       const result = await movies.updateOne(query, { $set: sentence }, { upsert: true });
       //, sentence, { upsert: true });
-      let resultLog = `Matches : ${result.matchedCount} \nUpdated : ${result.modifiedCount} \nupsertedCount : ${result.upsertedCount}\n`
-      console.log(resultLog);
+      // let resultLog = `Matches : ${result.matchedCount} \nUpdated : ${result.modifiedCount} \nupsertedCount : ${result.upsertedCount}\n`
     }
     catch (exception_var) {
       console.log(" CATCH at addSentenceToDatabase ", exception_var);
@@ -140,6 +124,113 @@ async function addSentenceToDatabase(sentence, language) {
     }
   }
 }
+// async function upsertPageData(url) {
+//   const client = new MongoClient(uri);
+//   {
+//     try {
+//       await client.connect();
+//       const database = client.db('reads');
+//       const movies = database.collection('articles');
+//       const query = { url: url }
+//       // const result = await movies.findOne(query);
+//       const update = { $set: { url: url } }
+//       await movies.findOneAndUpdate(query, update, { upsert: true });
+//       //, sentence, { upsert: true });
+//       // let resultLog = `Matches : ${result.matchedCount} \nUpdated : ${result.modifiedCount} \nupsertedCount : ${result.upsertedCount}\n`
+//     }
+//     catch (exception_var) {
+//       console.log(" CATCH at checkForPageData ", exception_var);
+//     }
+//     finally {
+//       // Ensures that the client will close when you finish/error
+//       await client.close();
+//     }
+//   }
+// }
+async function checkPageData(url) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('reads');
+      const movies = database.collection('articles');
+      const query = { url: url }
+      const result = await movies.findOne(query);
+      return result;
+    }
+    catch (exception_var) {
+      console.log(" CATCH at checkForPageData ", exception_var);
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+async function writePageResult(url, pageHTML) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('reads');
+      const movies = database.collection('articles');
+      const query = { url: url }
+      const update = { $set: { pageHTML: pageHTML } }
+      const result = await movies.findOneAndUpdate(query, update, { upsert: true });
+      return result
+    }
+    catch (exception_var) {
+      console.log(" CATCH at checkForPageData ", exception_var);
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+async function writePageCharacterResult(url, characters) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('reads');
+      const movies = database.collection('articles');
+      const query = { url: url }
+      const update = { $set: { characters: characters } }
+      const result = await movies.findOneAndUpdate(query, update, { upsert: true });
+    }
+    catch (exception_var) {
+      console.log(" CATCH at writePageCharacterResult ", exception_var);
+      await writePageCharacterResult(url, characters);
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+async function writeFinalResults(url, final) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('reads');
+      const movies = database.collection('finals');
+      const query = { url: url }
+      const update = { $set: { final: final } }
+      const result = await movies.findOneAndUpdate(query, update, { upsert: true });
+    }
+    catch (exception_var) {
+      console.log(" CATCH at writePageCharacterResult ", exception_var);
+      await writePageCharacterResult(url, characters);
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+}
+
 // ROUTES
 app.get('/words/:language/:word', (req, res) => {
   const client = new MongoClient(uri);
@@ -178,26 +269,93 @@ app.post('/words', (req, res) => {
   }
   run().catch(console.dir);
 })
-app.post('/read', async (req, res) => {
-  const vgmUrl = req.body.url;
-  if (!fs.existsSync('./cached-resources/chin.json')) {
-    (async () => {
-      //if (!fs.existsSync('./test.html')) {
-      const browser = await playwright.chromium.launch();
-      const page = await browser.newPage();
-      await page.goto(vgmUrl);
-      await page.screenshot({ path: './cached-resources/screenshot.png', fullPage: true });
-      const content = await page.content();
-      await fs.writeFileSync('./cached-resources/test.html', content);
-      await browser.close();
-      //}
-      const finalReturn = await runPython(res);
-    })();
+
+async function runPython(res, vgmUrl, text) {
+  const spawn = require("child_process").spawn;
+  const pythonProcess = spawn('python', ["test.py", text]);
+  const finalArray = [];
+  pythonProcess.stdout.on('data', async (data) => {
+    const characters = [...data.toString('utf-8')];
+    finalArray.push(characters);
+  });
+  pythonProcess.stdout.on('end', async () => {
+    await writePageCharacterResult(vgmUrl, finalArray);
+    const last = await buildResponse(finalArray);
+    console.log("finalArray : ", finalArray)
+    let final = [];
+    await last.sentences.map(async (charArray, index) => {
+      let section =
+      {
+        mandarin: charArray.join(''),
+        english: null,
+        vocab: last.cardUnits[index],
+      }
+      await final.push(section)
+    })
+    final.map(async (section) => addSentenceToDatabase(section, 'mandarin-to-english'));
+    await writeFinalResults(vgmUrl, final);
+    res.send(final);
+  })
+}
+async function quickCheckReturn(url) {
+  const client = new MongoClient(uri);
+  {
+    try {
+      await client.connect();
+      const database = client.db('reads');
+      const movies = database.collection('finals');
+      const query = { url: url }
+      const result = await movies.findOne(query);
+      return result;
+    }
+    catch (exception_var) {
+      console.log(" CATCH at writePageCharacterResult ", exception_var);
+    }
+    finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
   }
-  else {
-    let rawFile = fs.readFileSync('./cached-resources/chin.json');
-    let jsonFile = JSON.parse(rawFile);
-    res.send(jsonFile);
+}
+app.post('/read', async (req, res) => {
+  try {
+    if (req.body.url) {
+      console.log("REQ DOT BODY : ", req.body)
+      const vgmUrl = req.body.url;
+      const quickCheck = await quickCheckReturn(vgmUrl);
+      console.log("quickCheck : ", quickCheck)
+      if (quickCheck == null) {
+        query = await checkPageData(vgmUrl);
+        if (!query) {
+          (async () => {
+            const browser = await playwright.chromium.launch();
+            const page = await browser.newPage();
+            await page.goto(vgmUrl);
+            await page.screenshot({ path: `./cached-resources/${vgmUrl.replace(/\//g, '-')}-screenshot.png`, fullPage: true });
+            const content = await page.content();
+            await writePageResult(vgmUrl, content);
+            let path = `./cached-resources/${vgmUrl.replace(/\//g, '-')}.html`
+            await fs.writeFileSync(path, content);
+            await browser.close();
+            await runPython(res, vgmUrl, path);
+          })();
+        }
+        else {
+          let path = `./cached-resources/${req.body.url.replace(/\//g, '-')}.html`;
+          await runPython(res, vgmUrl, path);
+        }
+      }
+      else {
+        res.send(quickCheck.final);
+        return
+      }
+    }
+    else {
+      res.send("You need to submit a URL!!!")
+    }
+  }
+  catch (e) {
+    console.log("WELL THAT DIDN't WORK becuase :", e)
   }
 })
 app.listen(port, () => {
