@@ -1,70 +1,17 @@
-# Getting Started with Create React App
+# Frontend app design
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Currently there are 4 apps and 1 main app that controls frontend routing. 
 
-## Available Scripts
+Some of these are goals and others are already implemented. I guess I'll remove this comment when it all actually works this way. 
 
-In the project directory, you can run:
+ReadApp - Allows users to view stories, translate sentences, review sentence relevent flashcards, and save these for later study (within the DrillApp). The sentence relevent flash cards can "progress as a deck" meaning no repeats. 
 
-### `yarn start`
+DrillApp - The DrillApp allows users to view saved flash cards, stories, sentences, and translations. They can put flashcards on auto play. Drills are focused on repetition of basic facts like vocabulary, with n-sided flash cards that can include images, audio and/or text (perhaps more later). "Sides can be grouped together, such that side 2 and side 3 show on the same display, or seperate displays/card rotations. The other kind of drill focuses on procedures such as sentences or paragraphs, progresively revealing sides as the sentence/paragraph goes on, can also use images or audio. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+ProgressApp - This window will have stats of the learner's practice and drills. Perhaps it could offer specifci suggestions for review. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+TestingApp - This window will allow learners to test their knoweldge with various kinds of questions. 
 
-### `yarn test`
+MainApp - MainApp is where frontend routes are controled and acts as a common parent for state sharing between the 4 apps above. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
