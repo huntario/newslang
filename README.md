@@ -1,10 +1,10 @@
 # Newslang
 
 
-[Chalkboard view ](screenshots/Screen Shot 2021-08-01 at 11.42.27 PM.png)
+[Chalkboard view ](screenshots/screenshot1.png)
 
 
-[Sentence and Card view ](Screen Shot 2021-08-01 at 11.42.27 PM.png)
+[Sentence and Card view ](screebshots/screenshot2.png)
 
 
 
