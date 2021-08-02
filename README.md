@@ -4,7 +4,7 @@
 [Chalkboard view ](screenshots/screenshot1.png)
 
 
-[Sentence and Card view ](screebshots/screenshot2.png)
+[Sentence and Card view ](screenshots/screenshot2.png)
 
 
 
